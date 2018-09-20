@@ -1,0 +1,54 @@
+{__NOLAYOUT__}
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="utf-8" />
+    <title>你被冻结了</title>
+    <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="__PUBLIC__/Admin/css/app.v2.css" type="text/css" />
+    <!--[if lt IE 9]> <script src="__PUBLIC__/Admin/js/ie/html5shiv.js" cache="false"></script> <script src="__PUBLIC__/Admin/js/ie/respond.min.js" cache="false"></script> <script src="js/ie/excanvas.js" cache="false"></script> <![endif]-->
+    <style>
+        html{
+            height:100%;
+        }
+        body{
+            background-image: url('__PUBLIC__/Admin/images/frozen.jpg');
+            background-size:100% 100%;
+            height:100%;width:100%;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="row m-n">
+        <div class="col-sm-12" style="height:300px;display: flex;align-items: center;justify-content: center">
+            <h1 style="position:absolute;display:none;font-size:60px;" class="text-white darling"><span>You Are Frozen !</span></h1>
+        </div>
+        <div class="col-sm-12">
+            <div class="list-group m-b-sm bg-white m-b-lg">
+                <a href="#" class="list-group-item">
+                    <i class="fa fa-chevron-right icon-muted"></i>
+                    <span class="badge">110</span>
+                    <i class="fa fa-fw fa-phone icon-muted"></i>有什么冤屈可以向我申诉</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+    <div class="text-center padder clearfix">
+        <p>
+            <small>Mobile first web app framework base on Bootstrap<br>
+                &copy; 2017</small>
+        </p>
+    </div>
+
+<!-- / footer -->
+<script src="__PUBLIC__/Admin/js/app.v2.js"></script>
+<script>
+    $('.text-white').fadeIn(3000);
+</script>
+<!-- Bootstrap -->
+<!-- App -->
+</body>
+</html>

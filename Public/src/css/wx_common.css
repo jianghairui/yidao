@@ -1,0 +1,125 @@
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
+body, button, input, select, textarea { font:12px/1.5 "思源黑体 CN Regular",tahoma, arial, \5b8b\4f53; }
+h1, h2, h3, h4, h5, h6{ font-size:100%; }
+address, cite, dfn, em, var { font-style:normal; }
+code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+small{ font-size:12px; }
+ul, ol { list-style:none; }
+a { text-decoration:none; }
+a:hover { text-decoration:underline; }
+sup { vertical-align:text-top; }
+sub{ vertical-align:text-bottom; }
+legend { color:#000; }
+fieldset, img { border:0; }
+button, input, select, textarea { font-size:100%; margin:0; padding:0; list-style-type:none;    border: none;}
+table { border-collapse:collapse; border-spacing:0; }
+s, i, em {
+    font-style: normal;
+    text-decoration: none;
+}
+
+/*@font-face {*/
+    /*font-family: 'iconfont';  !* project id 549969 *!*/
+    /*src: url('//at.alicdn.com/t/font_549969_bezlclitxe597ldi.eot');*/
+    /*src: url('//at.alicdn.com/t/font_549969_bezlclitxe597ldi.eot?#iefix') format('embedded-opentype'),*/
+    /*url('//at.alicdn.com/t/font_549969_bezlclitxe597ldi.woff') format('woff'),*/
+    /*url('//at.alicdn.com/t/font_549969_bezlclitxe597ldi.ttf') format('truetype'),*/
+    /*url('//at.alicdn.com/t/font_549969_bezlclitxe597ldi.svg#iconfont') format('svg');*/
+/*}*/
+
+/*.iconfont{*/
+    /*font-family:"iconfont" !important;*/
+    /*font-size:16px;font-style:normal;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-webkit-text-stroke-width: 0.2px;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+/*}*/
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('//g.517cdn.com/PlugJavascriptJq/tamlliconfont/iconfont.eot');
+    src: url('//g.517cdn.com/PlugJavascriptJq/tamlliconfont/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('//g.517cdn.com/PlugJavascriptJq/tamlliconfont/iconfont.woff') format('woff'),
+    url('//g.517cdn.com/PlugJavascriptJq/tamlliconfont/iconfont.ttf') format('truetype'),
+    url('//g.517cdn.com/PlugJavascriptJq/tamlliconfont/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+html,body{
+    height: 100%;
+    background-color: #fcfcfc !important;
+}
+/*头部样式*/
+header{
+    text-align: center;
+    height: 6vh;
+    background-color: white;
+    color: #DABC88!important;
+    font-size: 4.4vw;
+    line-height: 6vh;
+}
+header a{
+    color: #DABC88!important;
+}
+.box-container{
+    padding: 0 4.4vw;
+}
+.back{
+    float: left;
+    height: 6vh;
+    line-height: 6vh;
+    font-size: 4.4vw;
+    margin-left: 4.4vw;
+}
+.tapIcon{
+    font-size: 6.5vw;
+}
+.tapText{
+    font-size: 3.2vw;
+}
+.tapIcon,.tapText{
+    color: #DABC88;
+}
+.contain{
+    width: 100%;
+    padding: 0 2.7%;
+    margin: 0 auto;
+    padding-bottom: 1px;
+}
+.title{
+    font-size: 4.54vw;
+    position: relative;
+    line-height: 2;
+    border-bottom: 2px solid #F3F5F7;
+    color: #DFBF8A;
+    margin-top:1vh;
+    margin-bottom:2.04vh;
+}
+.title span{
+    display: inline-block;
+    height: 100%;
+    border-bottom: 2px solid #DABC88;
+}
+.more{
+    font-size: 3.2vw;
+    line-height: 3;
+    float: right;
+}
+.more i{
+    font-size: 2.5vw;
+    vertical-align: middle;
+}
+.more a,header a{
+    color: #DABC88!important;
+}
+p img{
+    max-width: 100%;
+}

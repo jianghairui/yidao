@@ -1,0 +1,74 @@
+<header class="header bg-white b-b b-light" style="text-align: center">
+    <p style="font-size: 20px"><b>综合信息</b></p>
+</header>
+<section class="panel panel-default">
+    <div class="row m-l-none m-r-none bg-light lter">
+        <div class="col-sm-4 col-md-4 padder-v b-r b-light lt">
+                  <span class="fa-stack fa-2x pull-left m-r-sm">
+                  <i class="fa fa-circle fa-stack-2x text-dark"></i>
+                  <i class="fa fa-globe fa-stack-1x text-white"></i>
+                  <span class="easypiechart pos-abt easyPieChart" data-percent="100" data-line-width="4" data-track-color="#fff" data-scale-color="false" data-size="50" data-line-cap="butt" data-animate="2000" data-target="#bugs" data-update="3000" style="width: 50px; height: 50px; line-height: 50px;"><canvas width="50" height="50"></canvas></span>
+                  </span>
+            <a class="clear" href="#">
+                <span class="h3 block m-t-xs"><strong>{$total_pvuv}</strong></span>
+                <small class="text-muted text-uc">总访问量统计</small>
+            </a>
+        </div>
+        <div class="col-sm-4 col-md-4 padder-v b-r b-light lt">
+                  <span class="fa-stack fa-2x pull-left m-r-sm">
+                  <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                  <i class="fa fa-globe fa-stack-1x text-white"></i>
+                  <span class="easypiechart pos-abt easyPieChart" data-percent="100" data-line-width="4" data-track-color="#fff" data-scale-color="false" data-size="50" data-line-cap="butt" data-animate="2000" data-target="#bugs" data-update="3000" style="width: 50px; height: 50px; line-height: 50px;"><canvas width="50" height="50"></canvas></span>
+                  </span>
+            <a class="clear" href="#">
+                <span class="h3 block m-t-xs"><strong>{$today_pvuv}</strong></span>
+                <small class="text-muted text-uc">今日访问量统计</small>
+            </a>
+        </div>
+        <div class="col-sm-4 col-md-4 padder-v b-r b-light">
+                  <span class="fa-stack fa-2x pull-left m-r-sm">
+                  <i class="fa fa-circle fa-stack-2x text-info"></i>
+                  <i class="fa fa-male fa-stack-1x text-white"></i>
+                  </span>
+            <a class="clear" href="#">
+                <span class="h3 block m-t-xs"><strong>{$count}</strong></span>
+                <small class="text-muted text-uc">预约统计</small>
+            </a>
+        </div>
+    </div>
+</section>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>用户姓名</th>
+        <th>联系电话</th>
+        <th>预约时间</th>
+        <th>用户IP</th>
+    </tr>
+    </thead>
+    <tbody>
+    <foreach name="list" item="for">
+        <tr>
+            <td style="vertical-align: middle">
+                {$for['name']}
+            </td>
+            <td style="vertical-align: middle">
+                {$for['tel']}
+            </td>
+            <td style="vertical-align: middle">
+                {$for['ctime']}
+            </td>
+            <td style="vertical-align: middle">
+                {$for['ip']}
+            </td>
+        </tr>
+    </foreach>
+    <tr>
+        <td colspan="6" class="text-center">
+            <ul class="pagination pagination">
+                {$page}
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
