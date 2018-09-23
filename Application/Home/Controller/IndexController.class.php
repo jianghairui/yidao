@@ -4,6 +4,11 @@ namespace Home\Controller;
 class IndexController extends CommonController {
 //首页
     public function index(){
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $where = array();
         $where['is_recommend'] = 1;
         $where['cate_id'] = 1;
@@ -28,6 +33,11 @@ class IndexController extends CommonController {
     }
 
     public function detail() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $id = I('get.id');
         $exist = M('Article')->where(array('id'=>$id))->find();
         if($exist) {
@@ -40,32 +50,62 @@ class IndexController extends CommonController {
     }
 
     public function release() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $this->info = M('Company')->where(array('id'=>1))->find();
         $this->display();
     }
 
     public function about() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $this->display();
     }
 
     public function address() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $this->info = M('Company')->where(array('id'=>1))->find();
         $this->display();
     }
 
     public function company() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $this->info = M('Company')->where(array('id'=>1))->find();
         $this->display();
     }
 
 
     public function settledList() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $where['is_recommend'] = 1;
         $this->list = M('Settled')->where($where)->select();
         $this->display();
     }
 
     public function others() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $where = array();
         $where['is_recommend'] = 1;
         $where['cate_id'] = 2;
@@ -89,6 +129,11 @@ class IndexController extends CommonController {
     }
 
     public function visit() {
+        if(!$this->is_weixin()) {
+            $this->msg = '请用微信打开';
+            $this->display('Common/message');
+            exit();
+        }
         $this->display();
     }
 
