@@ -6,9 +6,9 @@
 		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>发布</title>
-		<script src='.__PUBLIC__/assets/js/public_fz.js'></script>
-		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_reset.css">
-		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_common.css">
+		<script src='__PUBLIC__/assets/js/public_fz.js'></script>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_reset.css">
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_common.css">
 		<style>
 				.release_img {
 						display: flex;
@@ -43,26 +43,26 @@
 </head>
 <body>
 <div class='release_img'>
-		<img src=".__PUBLIC__/assets/images/online.png" alt="">
+		<img src="__PUBLIC__/assets/images/online.png" alt="">
 </div>
 <div class='online_info'>
 		<div class='online_time'>敬请期待</div>
-		<div class='online_p'>请联系管理员：王小明</div>
-		<div class=online_p><a href="tel:18652452125">管理员电话：18652452125</a></div>
+		<div class='online_p'>请联系管理员：{$info.principal}</div>
+		<div class=online_p><a href="tel:18652452125">管理员电话：{$info.tel}</a></div>
 </div>
 <footer>
-		<a class='footer_item ' href='./index.html'>
-				<span><img src=".__PUBLIC__/assets/images/toutiao1.png" alt=""></span>
-				<span>艺道头条</span>
-		</a>
-		<a class='footer_item footer_active' href='release.html'>
-				<span><img src=".__PUBLIC__/assets/images/fabu.png" alt=""></span>
-				<span>发布</span>
-		</a>
-		<a class='footer_item' href='about.html'>
-				<span><img src=".__PUBLIC__/assets/images/my1.png" alt=""></span>
-				<span>关于我们</span>
-		</a>
+	<a class='footer_item' href="{:U('Index/index')}">
+		<span><img src="__PUBLIC__/assets/images/toutiao1.png" alt=""></span>
+		<span>{$cate_name.0}</span>
+	</a>
+	<a class='footer_item footer_active' href="{:U('Index/release')}">
+		<span><img src="__PUBLIC__/assets/images/fabu.png" alt=""></span>
+		<span>发布</span>
+	</a>
+	<a class='footer_item' href="{:U('Index/about')}">
+		<span><img src="__PUBLIC__/assets/images/my1.png" alt=""></span>
+		<span>关于我们</span>
+	</a>
 </footer>
 </body>
 </html>

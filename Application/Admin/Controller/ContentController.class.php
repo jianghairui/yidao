@@ -75,10 +75,11 @@ class ContentController extends CommonController
         if($search) { $where['a.title'] = array('LIKE',"%" . $search . "%");}
 
         vendor('Page.page');
+        $num = 10;
         $count = M('Article')->alias('a')->where($where)->count();
-        $Page = new \Page($count,10,5);
+        $Page = new \Page($count,$num,5);
         $this->page = $Page->fpage(4,5,6);
-        $this->pages = ceil($count/10);
+        $this->pages = ceil($count/$num);
 
         $this->list = M('Article')->alias('a')
             ->join('left join j_cate c on a.cate_id=c.id')
@@ -235,7 +236,17 @@ class ContentController extends CommonController
 
 
     public function settledList() {
-        $this->list = M('Settled')->select();
+        $search = I('get.search');
+        $where = array();
+        if($search) { $where['name'] = array('LIKE',"%" . $search . "%");}
+
+        vendor('Page.page');
+        $num = 10;
+        $count = M('Settled')->where($where)->count();
+        $Page = new \Page($count,$num,5);
+        $this->page = $Page->fpage(4,5,6);
+        $this->pages = ceil($count/$num);
+        $this->list = M('Settled')->where($where)->limit($Page->start()-1,$Page->cnums())->select();
         $this->display();
     }
 

@@ -65,8 +65,17 @@
 <script src="__PUBLIC__/src/js/jquery.form.js"></script>
 <script>
     var ue = UE.getEditor('editor')
+    var lon_rule = /^-?((0|1?[0-7]?[0-9]?)(([.][0-9]{1,6})?)|180(([.][0]{1,6})?))$/;
+    var lat_rule = /^-?((0|[1-8]?[0-9]?)(([.][0-9]{1,6})?)|90(([.][0]{1,6})?))$/;
 
     $("#setting-btn").click(function() {
+        var lonlat = $("input[name='lonlat']").val()
+        var lon = lonlat.split(',')[0]
+        var lat = lonlat.split(',')[1]
+        if(!lon_rule.test(lon) || !lat_rule.test(lat)) {
+            alert('经纬度格式不符')
+            return
+        }
         $("#formAjax").ajaxSubmit({
             url: "{:U('Content/saveCompany')}",
             enctype:"multipart/form-data",

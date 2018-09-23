@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>已入住企业</title>
+		<script src='__PUBLIC__/assets/js/public_fz.js'></script>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_reset.css">
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_common.css">
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_849300_i6rmmdzn9b.css">
+		<style>
+				.others_list{
+						background-color: #F3F5F7;
+						padding: 0.3rem 0;
+						color: #222;
+				}
+				.other_item{
+						padding: 0.3rem 0.25rem;
+						color: #222;
+						background-color: #fff;
+				}
+				.other_title{
+						font-size:0.28rem;
+						color: #222;
+						padding: 0.3rem 0 ;
+				}
+				.other_title_s{
+						color: #666;
+						font-size:0.24rem;
+				}
+		</style>
+</head>
+<body>
+<div class='others_list'>
+	<foreach name="list" item="for">
+		<a class="other_item" href='javascript:;'>
+			<div class="other_title clearOver">{$for.name}</div>
+			<div class='other_title_s clearOver'>{$for.desc}</div>
+			<div class='index_item_imgs'>
+				<?php $cover_arr = unserialize($for['cover']);?>
+				<foreach name="cover_arr" item="item">
+					<div class='item_img'>
+						<img src="/{$item}" alt="">
+					</div>
+				</foreach>
+			</div>
+			<div class='read_person main-color'>{$for.create_time|date="Y-m-d H:i",###}</div>
+		</a>
+	</foreach>
+</div>
+</body>
+</html>

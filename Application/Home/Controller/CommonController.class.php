@@ -12,9 +12,7 @@ use Think\Controller;
 class CommonController extends Controller
 {
     public function _initialize() {
-        $this->qijia_url = 'http://jf.jianghairui.com/attachment/';
-        $this->qijia_href = 'http://jf.jianghairui.com/';
-        $this->company = '天津巨丰水泥制品有限公司';
+        $this->cate_name = M('Cate')->where(array('id'=>array('IN',array(1,2))))->getField('cate_name',true);
     }
 
     protected function isMobile()

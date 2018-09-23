@@ -6,9 +6,10 @@
 		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>地理位置</title>
-		<script src='.__PUBLIC__/assets/js/public_fz.js'></script>
-		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_reset.css">
-		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_common.css">
+		<script src='__PUBLIC__/assets/js/public_fz.js'></script>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_reset.css">
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_common.css">
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XVKnlbRNQ8nmdlFWlaGtwZkijSX2HXuZ"></script>
 		<style>
 				.address_title {
 						padding: 0.35rem 0.25rem;
@@ -38,14 +39,24 @@
 </head>
 <body>
 <div class='address_title'>地理位置</div>
-<div class='address_img'>
-		<img src=".__PUBLIC__/assets/images/map.png" alt="">
+<div id="container" style="width: 94%;margin-left:3%;height: 300px;"></div>
+<div class='address_info'>
+		地址：{$info.address}
 </div>
 <div class='address_info'>
-		地址：天津市五道口大酒店
+	<a href="tel:18652545215"> 联系电话：{$info.tel}</a>
 </div>
-<div class='address_info'>
-		<a href="tel:18652545215"> 联系电话：18652545215</a>
-</div>
+
+<script>
+	var lon = "{$info.lon}";
+	var lat = "{$info.lat}";
+    var map = new BMap.Map("container");          // 创建地图实例
+    var point = new BMap.Point(lon,lat);  // 创建点坐标
+    map.centerAndZoom(point, 15);
+    map.enableScrollWheelZoom(true);
+    var marker = new BMap.Marker(point);  // 创建标注
+    map.addOverlay(marker);               // 将标注添加到地图中
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+</script>
 </body>
 </html>

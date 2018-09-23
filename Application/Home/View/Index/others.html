@@ -6,9 +6,9 @@
 		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>其他咨询</title>
-		<script src='.__PUBLIC__/assets/js/public_fz.js'></script>
-		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_reset.css">
-		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_common.css">
+		<script src='__PUBLIC__/assets/js/public_fz.js'></script>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_reset.css">
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/public_common.css">
 		<link rel="stylesheet" href="http://at.alicdn.com/t/font_849300_i6rmmdzn9b.css">
 		<style>
 				.others_list{
@@ -34,54 +34,78 @@
 </head>
 <body>
 <div class='others_list'>
-		<a class="other_item" href=''>
-				<div class="other_title clearOver">20岁身价上亿的年轻总裁，入驻创业学院20岁身价上亿的年轻总裁20岁身价上亿的年轻总裁20岁身价上亿的年轻总裁</div>
-				<div class='other_title_s clearOver'>恭喜三星公司入驻创业学20岁身价上亿的年轻总裁20岁身价上亿的年轻总裁20岁身价上亿的年轻总裁院</div>
-				<div class='index_item_imgs'>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-				</div>
-				<div class='read_person main-color'>2018年9月20日  18:00</div>
+	<foreach name="list" item="for">
+		<a class="other_item" href="{:U('Index/detail',array('id'=>$for['id']))}">
+			<div class="other_title clearOver">{$for.title}</div>
+			<div class='other_title_s clearOver'>{$for.desc}</div>
+			<div class='index_item_imgs'>
+				<?php $cover_arr = unserialize($for['cover']);?>
+				<foreach name="cover_arr" item="item">
+					<div class='item_img'>
+						<img src="/{$item}" alt="">
+					</div>
+				</foreach>
+			</div>
+			<div class='read_person main-color'>{$for.create_time|date="Y年m月d日 H:i",###}</div>
 		</a>
-		<a class="other_item" href=''>
-				<div class="other_title clearOver">20岁身价上亿的年轻总裁，入驻创业学院</div>
-				<div class='other_title_s'>恭喜三星公司入驻创业学院</div>
-				<div class='index_item_imgs'>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-				</div>
-				<div class='read_person main-color'>2018年9月20日  18:00</div>
-		</a>
-		<a class="other_item" href=''>
-				<div class="other_title clearOver">20岁身价上亿的年轻总裁，入驻创业学院</div>
-				<div class='other_title_s'>恭喜三星公司入驻创业学院</div>
-				<div class='index_item_imgs'>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-						<div class='item_img'>
-								<img src=".__PUBLIC__/assets/images/img_index.png" alt="">
-						</div>
-				</div>
-				<div class='read_person main-color'>2018年9月20日  18:00</div>
-		</a>
+	</foreach>
 </div>
+
+<script src='__PUBLIC__/assets/js/jquery-2.1.0.js'></script>
+<script>
+    var loadingdelay = false;  // 此处参数是判断是否重复的请求 避免数据多加载
+    var fromnum = "{$lastnum}";
+    $(window).on("scroll", function(event) {
+        var h = $(document).height();
+        var wh = $(window).height();
+        if ($(window).scrollTop() >= h - wh - 100 && !loadingdelay) {
+            loadingdelay = true;
+            $.ajax({
+                type: "POST",
+                url:"{:U('Index/get_index_list')}",
+                cache:false,
+                data:{fromnum:fromnum},
+                dataType:'json',
+                success: function(data) {
+                    console.log(data.list)
+                    if(data.list.length <= 0) {
+                        alert('已经到底了')
+                        return
+                    }
+                    for(i=0;i < data.list.length;i++) {
+                        var imgs = '';
+                        for(j=0;j < data.list[i].cover.length;j++) {
+                            imgs += '<div class="item_img"><img src="/'+data.list[i].cover[j]+'" alt=""></div>';
+                        }
+                        $('.others_list').append('<a class="other_item" href="/Home/Index/detail/id/'+data.list[i].id+'.html"><div class="other_title clearOver">'+data.list[i].title+'</div><div class="other_title_s clearOver">'+data.list[i].desc+'</div><div class="index_item_imgs">'+imgs+'</div><div class="read_person main-color">'+formatDateTime(data.list[i].create_time)+'</div></a>')
+                    }
+                    fromnum = data.fromnum
+                    loadingdelay = false;
+                }
+            });
+
+        }
+    });
+
+    function formatDateTime(timeStamp) {
+        var date = new Date();
+        date.setTime(timeStamp * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '年' + m + '月' + d+'日 '+h+':'+minute;
+    }
+</script>
+
+
+
 </body>
 </html>
