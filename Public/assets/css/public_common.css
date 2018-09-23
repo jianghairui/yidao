@@ -1,0 +1,71 @@
+.main-color{
+    color: #FF7500!important;
+}
+@font-face
+{
+    font-family: 'pingfang';
+    src: url('pingfang.ttf');
+}
+@font-face
+{
+    font-family: 'pingfang-med';
+    src: url('PingFang-Medium.ttf');
+}
+
+*{
+    font-family: 'pingfang';
+    font-size:0.26rem;
+}
+footer{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size:0.22rem;
+    padding: 0.1rem 0.81rem;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #fff;
+    border-top: 1px solid #CCCCCC;
+}
+
+.index_item_imgs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0.3rem 0;
+}
+
+.index_item_imgs .item_img {
+    width: 2.2rem;
+    height: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.index_item_imgs .item_img img {
+    width: 100%;
+}
+footer .footer_item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.footer_item img{
+    width: 0.48rem;
+    margin: 0.05rem;
+}
+footer  .footer_active{
+    color: #FF7500;
+}
+.read_person{
+    text-align: right;
+    font-size:0.22rem;
+    color: #ccc;
+}

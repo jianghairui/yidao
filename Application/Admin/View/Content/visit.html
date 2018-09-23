@@ -1,0 +1,80 @@
+<link rel="stylesheet" media="all" type="text/css" href="__PUBLIC__/datepicker/jquery-ui.css" />
+<link rel="stylesheet" media="all" type="text/css" href="__PUBLIC__/datepicker/jquery-ui-timepicker-addon.css" />
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+<style>
+    .ui-datepicker { z-index:9999 !important}
+</style>
+<section class="panel panel-default">
+    <header class="header bg-light b-b b-light">
+        <p><a href="">内容管理</a>&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;&nbsp;<a href="">参观信息设置</a></i></p>
+    </header>
+    <header class="header bg-white b-b b-dark">
+        <div id="shadow" style="position:absolute;z-index:9999;display: none;width:100%;height:300px"></div>
+        <div style="width:50%;padding:30px 0px;">
+            <form id="formAjax" class="form-horizontal" role="form" action="{:U('Content/visitAjax')}" method="post" enctype="multipart/form-data">
+                <div id="money-input">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">参观主题</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="title" maxlength="255" placeholder="输入主题名称" value="{$info['title']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">主题内容</label>
+                        <div class="col-sm-9">
+                            <textarea id="editor" name="content" type="text/plain" style="width:1024px;height:500px;">{$info.content}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">参观时间</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" id="visit_time" name="visit_time" value="{$info.visit_time}" placeholder="" required >
+                        </div>
+                        <label class="col-sm-3"></label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button id="setting-btn" type="button" class="btn btn-default">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+</section>
+<script type="text/javascript" src="__PUBLIC__/datepicker/jquery_002.js"></script>
+<script type="text/javascript" src="__PUBLIC__/datepicker/jquery-ui.js"></script>
+<script type="text/javascript" src="__PUBLIC__/datepicker/jquery-ui-timepicker-addon.js"></script>
+<script src="__PUBLIC__/src/js/jquery.form.js"></script>
+
+<script>
+    var ue = UE.getEditor('editor')
+
+    $('#visit_time').datetimepicker({
+        dateFormat: "yy-mm-dd",
+        monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+    });
+
+    $("#setting-btn").click(function() {
+        $("#formAjax").ajaxSubmit({
+            url: "{:U('Content/visitAjax')}",
+            enctype:"multipart/form-data",
+            type: "post",
+            dataType:'json',
+            success: function (data){
+                console.log(data)
+                if(data == 1) {
+                    alert('保存成功')
+                }else {
+                    alert(data)
+                }
+            },
+            error: function (data) {
+                alert("请求失败");
+            }
+        })
+    })
+</script>

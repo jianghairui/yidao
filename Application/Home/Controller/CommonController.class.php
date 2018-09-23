@@ -14,7 +14,6 @@ class CommonController extends Controller
     public function _initialize() {
         $this->qijia_url = 'http://jf.jianghairui.com/attachment/';
         $this->qijia_href = 'http://jf.jianghairui.com/';
-        $this->contact_info = M('Contact')->where(array('id'=>1))->find();
         $this->company = '天津巨丰水泥制品有限公司';
     }
 

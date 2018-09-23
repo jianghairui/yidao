@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>山西山大艺道孵化器管理有限公司</title>
+		<script src='.__PUBLIC__/assets/js/public_fz.js'></script>
+		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_reset.css">
+		<link rel="stylesheet" href=".__PUBLIC__/assets/css/public_common.css">
+		<link rel="stylesheet" href=".__PUBLIC__/assets/css/index.css">
+</head>
+<body>
+<div class='header'>
+		<a href="javascript:void (0)" class='input_a'><span class='iconfont '><img src=".__PUBLIC__/assets/images/search.png" alt=""></span><span class='input'>请输入您要搜索的内容</span></a>
+		<div class='header_nav'>
+				<a href="{:U('Index/others')}">其他资讯</a>
+				<span class='logo'><img src=".__PUBLIC__/assets/images/logo.png" alt=""></span>
+				<a href='./jion.html'>已入住企业</a>
+		</div>
+</div>
+<div class='index_box'>
+	<foreach name="list" item="for">
+
+		<a class="index_item" href="{:U('Index/detail',array('id'=>$for['id']))}">
+			<div class='index_item_title'>{$for.title}</div>
+			<div class='index_item_imgs'>
+				<?php $cover_arr = unserialize($for['cover']);?>
+				<foreach name="cover_arr" item="item">
+					<div class='item_img'>
+						<img src="/{$item}" alt="">
+					</div>
+				</foreach>
+			</div>
+			<div class='read_person'>{$for.pv}人阅读</div>
+		</a>
+
+	</foreach>
+</div>
+<footer>
+		<a class='footer_item footer_active' href='./index.html'>
+				<span><img src=".__PUBLIC__/assets/images/toutiao.png" alt=""></span>
+				<span>艺道头条</span>
+		</a>
+		<a class='footer_item' href='release.html'>
+				<span><img src=".__PUBLIC__/assets/images/fabu1.png" alt=""></span>
+				<span>发布</span>
+		</a>
+		<a class='footer_item' href='about.html'>
+				<span><img src=".__PUBLIC__/assets/images/my1.png" alt=""></span>
+				<span>关于我们</span>
+		</a>
+</footer>
+</body>
+</html>
+<script src='.__PUBLIC__/assets/js/jquery-2.1.0.js'></script>

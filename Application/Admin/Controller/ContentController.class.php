@@ -9,369 +9,443 @@
 namespace Admin\Controller;
 
 
+use Think\Exception;
 class ContentController extends CommonController
 {
     public function index() {
         echo 'OK OK TEST';
     }
-
-    public function courseList() {
-        $search = I('get.search');
-        $where = array();
-        if($search) { $where['n.title'] = array('LIKE',"%" . $search . "%");}
-        $this->list = M('News')->alias('n')
-            ->join("LEFT JOIN ims_acti2_admin a ON n.admin_id=a.id")
-            ->where($where)
-            ->field('n.*,a.nickname')
-            ->order(array('n.sort'=>'ASC'))
-            ->where(array('type'=>1))->select();
-        $this->type = 1;
-        $this->title = '企业历程';
+//分类列表
+    public function cateList() {
+        $this->list = M('Cate')->select();
         $this->display();
     }
-
-    public function newsList() {
-        $search = I('get.search');
-        $where['n.type'] = array('EQ',2);
-        if($search) { $where['n.title'] = array('LIKE',"%" . $search . "%");}
-        $this->list = M('News')->alias('n')
-            ->join("LEFT JOIN ims_acti2_admin a ON n.admin_id=a.id")
-            ->field('n.*,a.nickname')
-            ->order(array('n.sort'=>'ASC'))
-            ->where($where)->select();
-        $this->type = 2;
-        $this->title = '行业动态';
-        $this->display('courseList');
-    }
-
-    public function productList() {
-        $search = I('get.search');
-        $where = array();
-        if($search) { $where['title|desc'] = array('LIKE',"%" . $search . "%");}
-        $this->list = M('Join')
-            ->field('content',true)
-            ->order(array('sort'=>'ASC'))
-            ->where($where)->select();
-        $this->type = 3;
-        $this->title = '产品介绍';
-        $this->display('productList');
-    }
-
-    public function addProduct() {
-        $this->typename = '产品';
+//添加分类
+    public function addCate() {
         $this->display();
     }
-
-    public function addProductPost() {
-        $data['title'] = I('post.title');
-        $data['desc'] = I('post.desc');
-        $data['content'] = I('post.content');
-        $data['admin_id'] = session('admin_id');
-        $data['date'] = time();
-        $News = D('Join');
-        if($_FILES['file']['name'] != '') {
-            $info = $this->OneUpload('file');
-            $data['image'] = $info['savepath'].$info['savename'];
-        }
-
-        $result = $News->add($data);
-        if($result !== false) {
-            $this->success('添加成功',U('Content/productList'));
-        }else {
-            $this->error('添加失败');
-        }
-    }
-
-    public function modProduct() {
-        $content_id = I('get.content_id');
-        $info = M('Join')->where(array('id'=>$content_id))->find();
-        if($info) {
-            $this->info = $info;
-        }else {
-            $this->error('系统错误');
-        }
-        $this->typename = '产品';
-        $this->content_id = $content_id;
-        $this->display();
-    }
-
-    public function modProductPost() {
-        $data['title'] = I('post.title');
-        $data['desc'] = I('post.desc');
-        $data['content'] = I('post.content');
-        $data['updater_id'] = session('admin_id');
-        $data['lastdate'] = time();
-        $data['id'] = I('post.content_id');
-        $Join = D('Join');
-        if($_FILES['file']['name'] != '') {
-            $info = $this->OneUpload('file');
-            $data['image'] = $info['savepath'].$info['savename'];
-        }
-        $result = $Join->save($data);
-        if($result !== false) {
-            $this->success('修改成功',U('Content/productList'));
-        }else {
-            $this->error('修改失败');
-        }
-    }
-
-    public function delProduct() {
-        $id = I('get.content_id');
-        $res = D('Join')->where(array('id'=>$id))->delete();
-        if($res) {
-            $this->success('删除成功');
-        }else {
-            $this->error('删除失败');
-        }
-    }
-
-    public function environment() {
-        $search = I('get.search');
-        $where['n.type'] = array('EQ',4);
-        if($search) { $where['n.title'] = array('LIKE',"%" . $search . "%");}
-        $this->list = M('News')->alias('n')
-            ->join("LEFT JOIN ims_acti2_admin a ON n.admin_id=a.id")
-            ->field('n.*,a.nickname')
-            ->order(array('n.sort'=>'ASC'))
-            ->where($where)->select();
-        $this->type = 4;
-        $this->title = '驾校环境';
-        $this->display('courseList');
-    }
-
-    public function addContent() {
-        $type = I('get.type');
-        in_array($type,array(1,2,3,4)) || $this->error('非法参数');
-        switch($type) {
-            case 1:$typename = '企业历程';break;
-            case 2:$typename = '行业动态';break;
-            case 3:$typename = '产品';break;
-            case 4:$typename = '驾校环境';break;
-        }
-        $this->type = $type;
-        $this->typename = $typename;
-        $this->display();
-    }
-
-    public function addContentPost() {
-        $data['title'] = I('post.title');
-        $data['desc'] = I('post.desc');
-        $data['content'] = I('post.content');
-        $data['type'] = I('post.type');
-        $data['admin_id'] = session('admin_id');
-        $News = D('News');
-        if($_FILES['file']['name'] != '') {
-            $info = $this->OneUpload('file');
-            $data['img'] = $info['savepath'].$info['savename'];
-        }
-        switch($data['type']) {
-            case 1:$url = 'Content/courseList';break;
-            case 2:$url = 'Content/newsList';break;
-            case 3:$url = 'Content/lawsList';break;
-            case 4:$url = 'Content/environment';break;
-        }
-        $result = $News->add($data);
-        if($result !== false) {
-            $this->success('添加成功',U($url));
-        }else {
-            $this->error('添加失败');
-        }
-    }
-
-    public function modContent() {
-        $id = I('get.content_id');
-        $this->info = M('News')->where(array('id'=>$id))->find();
-        switch($this->info['type']) {
-            case 1:$typename = '企业历程';break;
-            case 2:$typename = '行业动态';break;
-            case 3:$typename = '交通法规';break;
-            case 4:$typename = '驾校环境';break;
-        }
-        $this->typename = $typename;
-        $this->content_id = $id;
-        $this->display();
-    }
-
-    public function modContentPost() {
-        $data['title'] = I('post.title');
-        $data['desc'] = I('post.desc');
-        $data['content'] = I('post.content');
-        $data['admin_id'] = session('admin_id');
-        $data['type'] = I('post.type');
-        $id = I('post.content_id');
-        $News = D('News');
-        if($_FILES['file']['name'] != '') {
-            $info = $this->OneUpload('file');
-            $data['img'] = $info['savepath'].$info['savename'];
-        }
-        switch($data['type']) {
-            case 1:$url = 'Content/courseList';break;
-            case 2:$url = 'Content/newsList';break;
-            case 3:$url = 'Content/lawsList';break;
-            case 4:$url = 'Content/environment';break;
-        }
-        $result = $News->where(array('id'=>$id))->save($data);
-        if($result !== false) {
-            $this->success('修改成功',U($url));
-        }else {
-            $this->error('修改失败');
-        }
-    }
-
-    public function delContent() {
-        $id = I('get.content_id');
-        $res = D('News')->where(array('id'=>$id))->delete();
-        if($res) {
-            $this->success('删除成功');
-        }else {
-            $this->error('删除失败');
-        }
-    }
-
-    public function sort() {
-        $sort = I('post.sort');
-        $id = I('post.id');
-        $res = M('News')->where(array('id'=>$id))->setField('sort',$sort);
-        if($res !== false) {
-            $this->ajaxReturn(1);
-        }else {
-            $this->ajaxReturn(-1);
-        }
-    }
-
-    public function proSort() {
-        $sort = I('post.sort');
-        $id = I('post.id');
-        $res = M('Join')->where(array('id'=>$id))->setField('sort',$sort);
-        if($res !== false) {
-            $this->ajaxReturn(1);
-        }else {
-            $this->ajaxReturn(-1);
-        }
-    }
-
-    public function slideList() {
-        $this->list = M('Slideshow')->order(array('ctime'=>'ASC'))->select();
-        $this->display();
-    }
-
-    public function addSlide() {
+//添加分类AJAX
+    public function addCateAjax() {
         if(IS_AJAX) {
-            if($_FILES['file']['name'] != '') {
-                $info = $this->OneUpload('file');
-                $_POST['pic'] = $info['savepath'].$info['savename'];
-            }
-            $Slide = D('Slideshow');
-            if($Slide->create()) {
-                if($Slide->add()) {
-                    json(1);
-                }else {
-                    json('添加失败');
-                }
+            $data['cate_name'] = I('post.cate_name');
+            $data['desc'] = I('post.desc');
+            $data['create_time'] = time();
+            $data['update_time'] = time();
+            $res = M('Cate')->add($data);
+            if($res) {
+                $data['id'] = $res;
+                json(array('code'=>1,'data'=>$data));
             }else {
-                json($Slide->getError());
+                json(array('code'=>-1,'data'=>'添加数据库失败'));
             }
         }
-        $this->display();
     }
-
-    public function modSlide() {
-        if(IS_AJAX) {
-            if($_FILES['file']['name'] != '') {
-                $info = $this->OneUpload('file');
-                $_POST['pic'] = $info['savepath'].$info['savename'];
-            }
-            $Slide = D('Slideshow');
-            if($Slide->create()) {
-                if($Slide->save() !== false) {
-                    json(1);
-                }else {
-                    json('保存失败');
-                }
-            }else {
-                json($Slide->getError());
-            }
-        }
-        $this->info = M('Slideshow')->where(array('id'=>I('get.id')))->find();
-        $this->display();
-    }
-
-    public function delSlide() {
-        $Slide = D('Slideshow');
+//修改分类
+    public function modCate() {
         $id = I('get.id');
-        $res = $Slide->where(array('id'=>$id))->delete();
+        $this->info = M('Cate')->where(array('id'=>$id))->find();
+        $this->display();
+    }
+//修改分类AJAX
+    public function modCateAjax() {
+        if(IS_AJAX) {
+            $data['id'] = I('post.cate_id');
+            $data['cate_name'] = I('post.cate_name');
+            $data['desc'] = I('post.desc');
+            $data['update_time'] = time();
+            $res = M('Cate')->save($data);
+            if($res !== false) {
+                $data['id'] = $res;
+                json(array('code'=>1,'data'=>$data));
+            }else {
+                json(array('code'=>-1,'data'=>'添加数据库失败'));
+            }
+        }
+    }
+//删除分类
+    public function delCate() {
+        //TODO
+    }
+//文章列表
+    public function articleList() {
+        $search = I('get.search');
+        $cate_id = I('get.cate_id');
+        $where = array();
+        if($cate_id) { $where['a.cate_id'] = $cate_id;}
+        if($search) { $where['a.title'] = array('LIKE',"%" . $search . "%");}
+
+        vendor('Page.page');
+        $count = M('Article')->alias('a')->where($where)->count();
+        $Page = new \Page($count,10,5);
+        $this->page = $Page->fpage(4,5,6);
+        $this->pages = ceil($count/10);
+
+        $this->list = M('Article')->alias('a')
+            ->join('left join j_cate c on a.cate_id=c.id')
+            ->join('left join j_admin ad on a.aid=ad.id')
+            ->where($where)
+            ->field('a.*,c.cate_name,ad.realname')
+            ->order(array('sort'=>'ASC'))
+            ->limit($Page->start()-1,$Page->cnums())
+            ->select();
+        $this->catelist = M('Cate')->select();
+        $this->display();
+    }
+//添加文章
+    public function addArticle() {
+        if(IS_POST) {
+            $token = I('post.TOKEN');
+            if(!checkToken($token)) {
+                $this->redirect('Content/addArticle',array(),3,'不可重复提交表单,正在返回表单页面...');
+            }
+            $info = $this->multi_upload();
+            if($info['error'] == 1) {
+                $this->error($info['msg']);
+            }
+
+            $data['cover'] = serialize($info['data']);
+            $data['title'] = I('post.title');
+            $data['desc'] = I('post.desc');
+            $data['content'] = I('post.content');
+            $data['cate_id'] = I('post.cate_id');
+            $data['aid'] = session('admin_id');
+            $data['is_recommend'] = I('post.is_recommend');
+            $data['is_recommend'] = $data['is_recommend'] ? $data['is_recommend'] : 0;
+            $data['create_time'] = time();
+            $data['update_time'] = time();
+
+            $res = M('Article')->add($data);
+            if($res) {
+                $this->success('添加成功',U('Content/articleList'));
+                exit();
+            }else {
+                $this->error('添加失败');
+            }
+        }
+        $this->catelist = M('Cate')->select();
+        createToken();
+        $this->display();
+    }
+//修改文章
+    public function modArticle() {
+        if(IS_POST) {
+            $token = I('post.TOKEN');
+            if(!checkToken($token)) {
+                $this->redirect('Content/modArticle',array('id'=>I('post.article_id')),3,'不可重复提交表单,正在返回表单页面...');
+            }
+
+            $exist = M('Article')->where(array('id'=>I('post.article_id')))->find();
+            if(!$exist) {
+                $this->error('非法操作ID');
+            }
+
+            $info = $this->multi_upload();
+            if($info['error'] == 1) {
+                $this->error($info['msg']);
+            }
+
+            $cover = I('post.cover') ? I('post.cover') : array();
+            $cover_arr = array_merge($cover,$info['data']);
+            if(count($cover_arr) > 3) {
+                foreach ($cover_arr as $v) {
+                    @unlink($v);
+                }
+                $this->error('非法操作COVER');
+            }
+
+            $old_cover = unserialize($exist['cover']);
+            foreach ($old_cover as $k=>$v) {
+                if(!in_array($v,$cover_arr)) {
+                    @unlink($v);
+                }
+            }
+
+            $data['id'] = I('post.article_id');
+            $data['cover'] = serialize($cover_arr);
+            $data['title'] = I('post.title');
+            $data['desc'] = I('post.desc');
+            $data['content'] = I('post.content');
+            $data['cate_id'] = I('post.cate_id');
+            $data['aid'] = session('admin_id');
+            $data['is_recommend'] = I('post.is_recommend');
+            $data['is_recommend'] = $data['is_recommend'] ? $data['is_recommend'] : 0;
+            $data['update_time'] = time();
+
+            $res = M('Article')->save($data);
+            if($res !== false) {
+                $this->success('保存成功',U('Content/articleList'));
+                exit();
+            }else {
+                $this->error('保存失败');
+            }
+        }
+
+        $this->info = M('Article')->where(array('id'=>I('get.id')))->find();
+        $this->cover = unserialize($this->info['cover']);
+        $this->catelist = M('Cate')->select();
+        createToken();
+        $this->display();
+    }
+//删除文章
+    public function delArticle() {
+        $article_id = I('post.article_id');
+        if(IS_AJAX) {
+            $exist = M('Article')->where(array('id'=>$article_id))->find();
+            if(!$exist) {
+                json(array('code'=>-1,'msg'=>'非法参数'));
+            }
+            $cover_arr = unserialize($exist['cover']);
+            foreach ($cover_arr as $k=>$v) {
+                @unlink($v);
+            }
+
+//            $ueditor_imgs = getPicFromUeditor($exist['content']);
+//            foreach ($ueditor_imgs as $v) {
+//                @unlink($v);
+//            }
+            $res = M('Article')->where(array('id'=>$article_id))->delete();
+            if($res) {
+                json(array('code'=>1,'msg'=>'删除成功'));
+            }else {
+                json(array('code'=>-1,'msg'=>'删除失败'));
+            }
+        }
+    }
+//文章排序
+    public function sortArticle() {
+        $data = array(
+            'sort' => I('post.sort'),
+        );
+        $res = M('Article')->where(array('id'=>I('post.id')))->save($data);
         if($res) {
-            $this->success('删除成功');
+            json(1);
         }else {
-            $this->error('删除失败');
+            json(-1);
+        }
+    }
+//是否推荐
+    public function ifrecommend() {
+        $result = M('Article')->where(array('id'=>I('post.id')))->save(array('is_recommend'=>I('post.is_recommend')));
+        if($result) {
+            json(1);
+        }else {
+            json(-1);
         }
     }
 
-    public function isrecommend() {
-        $Slide = M('Slideshow');
-        $id = I('post.id');
-        $info = $Slide->where(array('id'=>$id))->find();
-        if($info['is_recommend'] == 1) {
-            $res = $Slide->where(array('id'=>$id))->setField('is_recommend',-1);
+
+    public function settledList() {
+        $this->list = M('Settled')->select();
+        $this->display();
+    }
+
+    public function addCo() {
+        if(IS_POST) {
+            $token = I('post.TOKEN');
+            if(!checkToken($token)) {
+                $this->redirect('Content/addCo',array(),3,'不可重复提交表单,正在返回表单页面...');
+            }
+            $info = $this->multi_upload();
+            if($info['error'] == 1) {
+                $this->error($info['msg']);
+            }
+
+            $data['cover'] = serialize($info['data']);
+            $data['name'] = I('post.name');
+            $data['desc'] = I('post.desc');
+            $data['content'] = I('post.content');
+            $data['aid'] = session('admin_id');
+            $data['is_recommend'] = I('post.is_recommend');
+            $data['is_recommend'] = $data['is_recommend'] ? $data['is_recommend'] : 0;
+            $data['create_time'] = time();
+            $data['update_time'] = time();
+
+            $res = M('Settled')->add($data);
+            if($res) {
+                $this->success('添加成功',U('Content/settledList'));
+                exit();
+            }else {
+                $this->error('添加失败');
+            }
+        }
+        createToken();
+        $this->display();
+    }
+
+    public function modCo() {
+        if(IS_POST) {
+            $token = I('post.TOKEN');
+            if(!checkToken($token)) {
+                $this->redirect('Content/modCo',array('id'=>I('post.company_id')),3,'不可重复提交表单,正在返回表单页面...');
+            }
+            $exist = M('Settled')->where(array('id'=>I('post.company_id')))->find();
+            if(!$exist) {
+                $this->error('非法操作ID');
+            }
+
+            $info = $this->multi_upload();
+            if($info['error'] == 1) {
+                $this->error($info['msg']);
+            }
+
+            $cover = I('post.cover') ? I('post.cover') : array();
+            $cover_arr = array_merge($cover,$info['data']);
+            if(count($cover_arr) > 3) {
+                foreach ($cover_arr as $v) {
+                    @unlink($v);
+                }
+                $this->error('非法操作COVER');
+            }
+
+            $old_cover = unserialize($exist['cover']);
+            foreach ($old_cover as $k=>$v) {
+                if(!in_array($v,$cover_arr)) {
+                    @unlink($v);
+                }
+            }
+
+            $data['id'] = I('post.company_id');
+            $data['cover'] = serialize($cover_arr);
+            $data['name'] = I('post.name');
+            $data['desc'] = I('post.desc');
+            $data['content'] = I('post.content');
+            $data['aid'] = session('admin_id');
+            $data['is_recommend'] = I('post.is_recommend');
+            $data['is_recommend'] = $data['is_recommend'] ? $data['is_recommend'] : 0;
+            $data['update_time'] = time();
+
+            $res = M('Settled')->save($data);
+            if($res !== false) {
+                $this->success('保存成功',U('Content/settledList'));
+                exit();
+            }else {
+                $this->error('保存失败');
+            }
+        }
+        $this->info = M('Settled')->where(array('id'=>I('get.id')))->find();
+        $this->cover = unserialize($this->info['cover']);
+        createToken();
+        $this->display();
+    }
+
+    public function delCo() {
+        $company_id = I('post.company_id');
+        if(IS_AJAX) {
+            $exist = M('Settled')->where(array('id'=>$company_id))->find();
+            if(!$exist) {
+                json(array('code'=>-1,'msg'=>'非法参数'));
+            }
+            $cover_arr = unserialize($exist['cover']);
+            foreach ($cover_arr as $k=>$v) {
+                @unlink($v);
+            }
+
+//            $ueditor_imgs = getPicFromUeditor($exist['content']);
+//            foreach ($ueditor_imgs as $v) {
+//                @unlink($v);
+//            }
+            $res = M('Settled')->where(array('id'=>$company_id))->delete();
+            if($res) {
+                json(array('code'=>1,'msg'=>'删除成功'));
+            }else {
+                json(array('code'=>-1,'msg'=>'删除失败'));
+            }
+        }
+    }
+
+    public function sortCo() {
+        $data = array(
+            'sort' => I('post.sort'),
+        );
+        $res = M('Settled')->where(array('id'=>I('post.id')))->save($data);
+        if($res) {
+            json(1);
+        }else {
+            json(-1);
+        }
+    }
+
+    public function ifrecommendCo() {
+        $result = M('Settled')->where(array('id'=>I('post.id')))->save(array('is_recommend'=>I('post.is_recommend')));
+        if($result) {
+            json(1);
+        }else {
+            json(-1);
+        }
+    }
+
+    public function visit() {
+        $id = 1;
+        $this->info = M('Visit')->where(array('id'=>$id))->find();
+        $this->display();
+    }
+
+    public function visitAjax() {
+        if(IS_AJAX) {
+            $data['title'] = I('post.title');
+            $data['visit_time'] = I('post.visit_time');
+            $data['content'] = I('post.content');
+            $id = 1;
+            $exist = M('Visit')->where(array('id'=>$id))->find();
+            if($exist) {
+                $res = M('Visit')->where(array('id'=>$id))->save($data);
+            }else {
+                $res = M('Visit')->add($data);
+            }
             if($res !== false) {
                 json(1);
             }else {
-                json('系统错误');
-            }
-        }else {
-            $res = $Slide->where(array('id'=>$id))->setField('is_recommend',1);
-            if($res !== false) {
-                json(2);
-            }else {
-                json('系统错误');
+                json('保存失败');
             }
         }
     }
 
-    public function newSort() {
-        $wraper = M('Slideshow');
-        $order = $wraper->order(array('ctime' => 'ASC'))->getField('ctime', true);
-
-        $newArr = explode(',', $_POST['newid']);
-        foreach ($newArr as $key => $v) {
-            $data = array(
-                'ctime' => $order[$key]
-            );
-            $wraper->where(array('id' => $v))->save($data);
-        }
-
-        $this->ajaxReturn(1);
-    }
-
-    public function contactInfo() {
-        $this->info = M('Contact')->where(array('id'=>1))->find();
+    public function companyInfo() {
+        $id = 1;
+        $this->info = M('Company')->where(array('id'=>$id))->find();
+        $this->lonlat = implode(',',array($this->info['lon'],$this->info['lat']));
         $this->display();
     }
 
-    public function saveContactInfo() {
-        $Contact = D('Contact');
-        $_POST['id'] = 1;
-        if($_FILES['file']['name'] != '') {
-            $info = $this->OneUpload('file');
-            $_POST['qrcode'] = $info['savepath'].$info['savename'];
-        }
-        if($_FILES['file2']['name'] != '') {
-            $info = $this->OneUpload('file2');
-            $_POST['course_qrcode'] = $info['savepath'].$info['savename'];
-        }
+    public function saveCompany() {
         if(IS_AJAX) {
-            if($Contact->create()) {
-                $res = $Contact->save();
-                if($res !== false) {
-                    $this->ajaxReturn(1);
-                }else {
-                    $this->ajaxReturn('保存失败');
-                }
+            $data['name'] = I('post.name');
+            $data['principal'] = I('post.principal');
+            $data['tel'] = I('post.tel');
+            $data['address'] = I('post.address');
+            $data['email'] = I('post.email');
+            $data['profile'] = I('post.profile');
+            $lonlat = explode(',',I('post.lonlat'));
+            $data['lon'] = $lonlat[0];
+            $data['lat'] = $lonlat[1];
+            $id = 1;
+            $exist = M('Company')->where(array('id'=>$id))->find();
+            if($exist) {
+                $res = M('Company')->where(array('id'=>$id))->save($data);
             }else {
-                $this->ajaxReturn($Contact->getError());
+                $res = M('Company')->add($data);
+            }
+            if($res !== false) {
+                json(1);
+            }else {
+                json('保存失败');
             }
         }
     }
+
+    public function test() {
+        $article_id = 1;
+        $exist = M('Article')->where(array('id'=>$article_id))->find();
+        $ueditor_imgs = getPicFromUeditor($exist['content']);
+        foreach ($ueditor_imgs as $v) {
+            @unlink($v);
+        }
+        dump($ueditor_imgs);die;
+
+    }
+
+
+
 
 
 

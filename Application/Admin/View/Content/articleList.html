@@ -1,0 +1,158 @@
+<style>
+    .btn {
+        margin-right: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .pagination > li:first-of-type > a, .pagination > li:first-of-type > span {
+        border-radius: 0;
+    }
+</style>
+
+<section class="panel panel-default">
+    <header class="header bg-white b-b b-light">
+        <p><a href="">内容管理</a>&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;&nbsp;<a href="">资讯管理</a></i></p>
+    </header>
+    <header class="panel-heading font-bold" style="height:55px">
+        <form method="get" action="">
+            <span class="col-sm-4" style="font-size:25px;"></span>
+            <span class="col-sm-8" style="text-align: right;">
+                <a href="{:U('Content/addArticle')}" class="btn btn-facebook">添加</a>
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i>搜索</button>
+                <select name="cate_id" class="form-control" style="display: inline-block;width: 120px">
+                    <option value="">--全部--</option>
+                    <foreach name="catelist" item="for">
+                        <option value="{$for.id}" <if condition="$_GET['cate_id'] eq $for['id']">selected</if> >{$for.cate_name}</option>
+                    </foreach>
+                </select>
+                <input type="text" name="search" value="{$Think.get.search}" placeholder="" class="form-control" style="display:inline-block; width: 250px">
+
+            </span>
+        </form>
+    </header>
+    <div class="table-responsive">
+        <table class="table table-striped b-t b-light text-sm">
+            <thead>
+            <tr>
+                <th>类型</th>
+                <th>标题</th>
+                <th>简介</th>
+                <th>作者</th>
+                <th>排序</th>
+                <th>推荐</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="list" item="item">
+                <tr class="tr{$item.id}" style="font-size: 14px;">
+                    <td style="vertical-align: middle">
+                        {$item.cate_name}
+                    </td>
+                    <td style="vertical-align: middle">
+                        {$item.title}
+                    </td>
+                    <td style="vertical-align: middle;max-width:300px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                        {$item.desc}
+                    </td>
+                    <td style="vertical-align: middle">
+                        {$item.realname}
+                    </td>
+                    <td style="vertical-align: middle">
+                        <input type="text" name="sort" title="{$item.id}" class="form-control sort" value="{$item.sort}" style="width: 50px">
+                    </td>
+                    <td style="vertical-align: middle">
+                        <label class="switch" style="margin: 0;padding: 0;">
+                            <input type="hidden" value="{$item.id}">
+                            <input type="checkbox" class="is_recommend" name="is_recommend" value="1" <if condition="$item['is_recommend'] eq 1">checked</if> >
+                            <span style=""></span>
+                        </label>
+                    </td>
+                    <td style="vertical-align: middle;width:300px">
+                        <a href="{:U('Content/modArticle',array('id'=>$item['id']))}"   class="btn btn-primary">编辑</a>
+                        <a href="javascript:;"  class="btn btn-danger" onclick="deleteArticle({$item.id})">删除</a>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+    </div>
+</section>
+<div class="col-sm-3"></div>
+<div class="col-sm-6 text-center">
+    <ul class="pagination pagination" <if condition="$pages elt 1">style="display:none"</if> >
+        {$page}
+    </ul>
+</div>
+<script>
+
+    function deleteArticle(id) {
+        if(confirm('确定删除吗?')) {
+            var article_id = id;
+            $.ajax({
+                url:"{:U('Content/delArticle')}",
+                type:"post",
+                dataType:"json",
+                data:{article_id:article_id},
+                success:function(data) {
+                    console.log(data)
+                    if(data.code == 1) {
+                        $(".tr"+article_id).remove()
+                    }else {
+                        alert(data.msg)
+                    }
+                },
+                error:function(data) {
+                    console.log(data)
+                    alert('请求接口失败')
+                }
+            })
+        }
+    }
+
+    $(".sort").bind('input propertychange', function() {
+        var id = $(this).attr('title');
+        var sort = $(this).val();
+        var rule = /^[0-9]{0,10}$/;
+        if(!rule.test(sort)) {
+            alert('排序必须为数字,且不超过10位');
+            return;
+        }
+        $.ajax({
+            url:"{:U('Content/sortArticle')}",
+            type:"post",
+            data:{id:id,sort:sort},
+            success:function(data) {
+                console.log(data)
+            },
+            error: function(data) {
+                console.log('system error')
+            }
+        })
+    });
+
+    $('.is_recommend').click(function(){
+        if($(this).prop('checked') == true) {
+            var is_recommend = 1
+        }else {
+            var is_recommend = -1
+        }
+        var id = $(this).prev().val()
+        $.ajax({
+            url:"{:U('Content/ifrecommend')}",
+            dataType:"json",
+            type:"post",
+            data:{id:id,is_recommend:is_recommend},
+            success:function(data) {
+                console.log(data)
+            },
+            error:function(data) {
+                alert('请求失败');
+            }
+        })
+    })
+
+</script>

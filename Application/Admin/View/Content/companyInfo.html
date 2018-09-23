@@ -1,0 +1,88 @@
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+<section class="panel panel-default">
+    <header class="header bg-light b-b b-light">
+        <p><a href="">内容管理</a>&nbsp;&nbsp;<i class="fa fa-angle-double-right">&nbsp;&nbsp;<a href="">企业综合信息</a></i></p>
+    </header>
+    <header class="header bg-white b-b b-dark">
+        <div id="shadow" style="position:absolute;z-index:9999;display: none;width:100%;height:300px"></div>
+        <div style="width:50%;padding:30px 0px;">
+            <form id="formAjax" class="form-horizontal" role="form" action="{:U('Content/saveCompany')}" method="post" enctype="multipart/form-data">
+                <div id="money-input">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">企业名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" maxlength="30" placeholder="输入企业名称" value="{$info['name']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系人</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="principal" maxlength="30" placeholder="输入联系人姓名" value="{$info['principal']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系电话</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="tel" maxlength="15" placeholder="输入联系人电话" value="{$info['tel']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">详细地址</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="address" maxlength="255" placeholder="输入详细地址" value="{$info['address']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">经纬度</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="lonlat" maxlength="30" placeholder="逗号隔开,格式如下(117.351315,47.599314)" value="{$lonlat}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Email:</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" name="email" placeholder="输入邮箱地址" value="{$info['email']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">公司介绍</label>
+                        <div class="col-sm-9">
+                            <textarea id="editor" name="profile" type="text/plain" style="width:1024px;height:500px;">{$info.profile}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button id="setting-btn" type="button" class="btn btn-default">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+</section>
+<script src="__PUBLIC__/src/js/jquery.form.js"></script>
+<script>
+    var ue = UE.getEditor('editor')
+
+    $("#setting-btn").click(function() {
+        $("#formAjax").ajaxSubmit({
+            url: "{:U('Content/saveCompany')}",
+            enctype:"multipart/form-data",
+            type: "post",
+            dataType:'json',
+            success: function (data){
+                console.log(data)
+                if(data == 1) {
+                    alert('保存成功')
+                }else {
+                    alert(data)
+                }
+            },
+            error: function (data) {
+                alert("请求失败");
+            }
+        })
+    })
+</script>

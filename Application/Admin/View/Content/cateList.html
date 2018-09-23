@@ -1,0 +1,29 @@
+<style>
+    .btn-rounded {
+        position: relative;
+    }
+</style>
+<section class="panel panel-default">
+    <header class="header bg-white b-b b-light">
+        <p><span style="font-size:16px">内容管理</span>&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>&nbsp;&nbsp;&nbsp;<span class="active" style="font-size: 14px">分类管理</span></i></p>
+    </header>
+</section>
+<section class="scrollable padder">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="m-t-xs">资讯分类</h4>
+            <div class="doc-buttons">
+                <foreach name="list" item="for">
+                    <a href="{:U('Content/modCate',array('id'=>$for['id']))}" class="btn btn-s-md btn-facebook btn-rounded" id="mark{$for.id}" data-toggle="ajaxModal">{$for.cate_name}
+                        <span class="fa fa-pencil" style="position: absolute;right:0;top:0;color:#fff;font-size: 18px"></span>
+                    </a>
+                </foreach>
+                <!--<a href="{:U('Content/addCate')}" class="btn btn-s-md btn-default btn-rounded kind" data-toggle="ajaxModal">增加</a>-->
+            </div>
+
+        </div>
+    </div>
+</section>
+<script src="__PUBLIC__/js/jquery.form.js"></script>
+<script>
+</script>
