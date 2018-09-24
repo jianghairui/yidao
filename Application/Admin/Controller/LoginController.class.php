@@ -26,6 +26,11 @@ class LoginController extends Controller {
     public function login() {
         $Admin = M('Admin');
         if(IS_POST) {
+            $login_vcode = I('post.login_vcode');
+            if($login_vcode !== session('login_vcode')) {
+                $this->error('验证码错误');
+            }
+            session('login_vcode',null);
             $where['username'] = $_POST['username'];
             $where['password'] = md5(I('post.password'));
             $result = $Admin->where($where)->find();
@@ -57,5 +62,25 @@ class LoginController extends Controller {
     public function logout() {
         session(null);
         $this->redirect('Login/index');
+    }
+
+    public function verifyCode() {
+        $vcode = generateVerify(200,50,2,4,24);
+        session('login_vcode',$vcode);
+    }
+
+    public function setsession() {
+//        session('vcode1','我是10秒的验证码啊');
+//        session('vcode2','我是20秒的验证码啊');
+    }
+
+    public function getsession() {
+        dump(session('login_vcode'));
+        dump($_SESSION);
+    }
+
+    public function test() {
+        session('a',array('A','B'));
+//        phpinfo();
     }
 }
