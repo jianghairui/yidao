@@ -39,6 +39,7 @@ class LoginController extends Controller {
                 session('admin_id',$result['id']);
                 session('username',$result['username']);
                 session('nickname',$result['nickname']);
+                session('client_ip',$_SERVER['REMOTE_ADDR']);
 
                 if($_POST['remember_pwd'] == 1) {
                     cookie('shandayidao_username',I('post.username'),3600*24*7);
@@ -75,7 +76,6 @@ class LoginController extends Controller {
     }
 
     public function getsession() {
-        dump(session('login_vcode'));
         dump($_SESSION);
     }
 
