@@ -134,6 +134,7 @@ class IndexController extends CommonController {
             $this->display('Common/message');
             exit();
         }
+        $this->info = M('Visit')->find();
         $this->display();
     }
 

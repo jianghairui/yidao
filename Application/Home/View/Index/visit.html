@@ -33,13 +33,15 @@
 		</style>
 </head>
 <body>
-<div  class='visit'>参观时间：2018年9月25日</div>
-<div  class='visit'>参观主题：双创活动开幕仪式</div>
+<div  class='visit'>参观时间：{$info.visit_time|strtotime|date="Y年m月d日 H:i",###}</div>
+<div  class='visit'>参观主题：{$info.title}</div>
 <div class='visit_content'>
-		2014年，一只小红薯诞生于湖南长沙，定位“中高端薯产品专卖开创品牌”。门店产品丰富，集中了薯产品所有能够标准化量产的产品，包括烤红薯、芝士番薯、蜜薯盒子、薯类酥品、薯泡芙等40多种产品。
+	{$info.content|htmlspecialchars_decode}
 </div>
+<style>
+	p img {width:100%!important;}
+</style>
 <div class='visit_img'>
-		<img src="__PUBLIC__/assets/images/visit.png" alt="">
 </div>
 </body>
 </html>
