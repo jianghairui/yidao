@@ -28,17 +28,17 @@ class LoginController extends Controller {
         if(IS_POST) {
             $login_vcode = I('post.login_vcode');
             if($login_vcode !== session('login_vcode')) {
-                $this->error('验证码错误');
+                $this->error('验证码错误',U('Login/index'));
             }
             session('login_vcode',null);
             $where['username'] = $_POST['username'];
-            $where['password'] = md5(I('post.password'));
+            $where['password'] = md5(I('post.password') . C('MD5KEY'));
             $result = $Admin->where($where)->find();
             if($result) {
                 session('shandayidao_username',1);
                 session('admin_id',$result['id']);
                 session('username',$result['username']);
-                session('nickname',$result['nickname']);
+                session('realname',$result['realname']);
                 session('client_ip',$_SERVER['REMOTE_ADDR']);
 
                 if($_POST['remember_pwd'] == 1) {
@@ -51,8 +51,33 @@ class LoginController extends Controller {
 
                 $this->success('登录成功',U('Index/index'));
             }else {
-                $this->error('用户名密码不匹配');
+                $this->error('用户名密码不匹配',U('Login/index'));
             }
+        }
+    }
+
+    public function passwd() {
+        $this->display();
+    }
+
+    public function checkOldPassword() {
+        $oldpassword = I('post.oldpassword');
+        $res = M('Admin')->where(array('id'=>session('admin_id'),'password'=>md5($oldpassword . C('MD5KEY'))))->find();
+        if($res) {
+            json(1);
+        }else {
+            json(-1);
+        }
+    }
+
+    public function changepasswd() {
+        $password = I('post.password');
+        $realname = I('post.realname');
+        $res = M('Admin')->where(array('id'=>session('admin_id')))->save(array('password'=>md5($password . C('MD5KEY')),'realname'=>$realname));
+        if($res !== false) {
+            json(1);
+        }else {
+            json(-1);
         }
     }
 

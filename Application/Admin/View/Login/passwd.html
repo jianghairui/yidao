@@ -31,15 +31,21 @@
         <div class="form-group"></div>
         <div class="form-group"></div>
         <div class="form-group has-success">
+            <label class="col-sm-2 control-label">修改昵称</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" maxlength="30" name="realname" value="{$Think.session.realname}" required>
+            </div>
+        </div>
+        <div class="form-group has-success">
             <label class="col-sm-2 control-label">设置新密码</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" name="password" value="" required>
+                <input type="password" class="form-control" minlength="6" maxlength="30" name="password" value="" required>
             </div>
         </div>
         <div class="form-group has-success">
             <label class="col-sm-2 control-label">确认新密码</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" name="repassword" value="" required>
+                <input type="password" class="form-control" minlength="6" maxlength="30" name="repassword" value="" required>
             </div>
         </div>
         <div class="form-group"></div>
@@ -67,10 +73,22 @@
         </button>
     </div>
 </div>
-<script src="__PUBLIC__/js/jquery.js"></script>
-<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/jquery-1.11.1.min.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
 <script>
     $('#send-btn').on('click', function () {
+        var realname = $("input[name='realname']").val();
+        var password = $("input[name='password']").val();
+        var repassword = $("input[name='repassword']").val();
+        if(realname == '') {
+            layer.msg('昵称不能为空',{icon:2});return;
+        }
+        if(password == '') {
+            layer.msg('密码不能为空',{icon:2});return;
+        }
+        if(repassword != password) {
+            layer.msg('密码不一致',{icon:2});return;
+        }
         layerIndex = layer.open({
             type: 1,
             title:'输入原密码',
@@ -86,21 +104,16 @@
 
     function pushMessage() {
         layer.close(layerIndex);
+        var realname = $("input[name='realname']").val();
         var password = $("input[name='password']").val();
-        var repassword = $("input[name='repassword']").val();
         var oldpassword = $("input[name='oldpassword']").val();
-        if(password == '') {
-            layer.msg('密码不能为空',{icon:2});return;
-        }
-        if(repassword != password) {
-            layer.msg('密码不一致',{icon:2});return;
-        }
 
         $.post("{:U('Login/checkOldPassword')}",{oldpassword:oldpassword},function(data){
             if(data == 1) {
-                $.post("{:U('Login/changeMyPassword')}",{password:password},function(msg){
+                $.post("{:U('Login/changepasswd')}",{password:password,realname:realname},function(msg){
                     if(msg == 1) {
-                        layer.msg('修改成功',{icon:1});
+                        // layer.msg('修改成功',{icon:1});
+                        window.location.href = '/admin/Login/logout'
                     }else {
                         layer.msg('修改失败',{icon:2});
                     }
